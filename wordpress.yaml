@@ -1,0 +1,49 @@
+apiVersion: apps/v1 #beta2 working on 1.9
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  ports:
+    - port: 80
+  type: LoadBalancer
+  selector:
+    app: wordpress
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: webserver
+        image: bkauf/webserver
+        ports:
+        - containerPort: 80
+        env:
+        - name:  WORDPRESS_DB_PASSWORD
+          value: abc123
+        - name: WORDPRESS_DB_HOST
+          value: database:3306
+      - name: database
+        image: mysql
+        #ports:
+        #- containerPort: 3306
+        env:
+        - name:  MYSQL_ROOT_PASSWORD
+          value: abc123
+        - name: MYSQL_DATABASE
+          value: wordpress
+        - name: MYSQL_USER
+          value: wordpress
+        - name: MYSQL_PASSWORD
+          value: abc123
