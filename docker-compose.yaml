@@ -3,7 +3,7 @@ services:
   webserver:
     depends_on:
     - database
-    #container_name: bkauf/webserver
+    #container_name: bkauf/webserverergeg
     restart: always
     image: bkauf/webserver
     #build: .
